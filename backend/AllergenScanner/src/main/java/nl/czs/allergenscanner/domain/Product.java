@@ -11,4 +11,5 @@ public class Product {
     int barcodeId;
     String name;
     String[] allergens;
+    String brand;
 }
