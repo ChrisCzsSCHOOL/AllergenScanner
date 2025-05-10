@@ -1,5 +1,6 @@
 package nl.czs.allergenscanner.controller;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.AllArgsConstructor;
 import nl.czs.allergenscanner.domain.Product;
 import nl.czs.allergenscanner.service.AllergenService;
@@ -21,7 +22,7 @@ public class AllergenController {
     }
 
     @GetMapping("/{barcodeId}")
-    public ResponseEntity<Product> getAllergensByBarcodeId(@PathVariable int barcodeId) {
+    public ResponseEntity<Product> getAllergensByBarcodeId(@PathVariable long barcodeId) throws UnirestException {
         return ResponseEntity.ok().body(service.getAllergensByBarcodeId(barcodeId));
     }
 }

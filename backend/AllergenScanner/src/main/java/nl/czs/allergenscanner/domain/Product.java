@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Product {
-    int barcodeId;
+    long barcodeId;
     String name;
     String[] allergens;
     String brand;
