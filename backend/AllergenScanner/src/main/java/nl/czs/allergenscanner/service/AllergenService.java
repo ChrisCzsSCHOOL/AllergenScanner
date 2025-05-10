@@ -15,7 +15,7 @@ public class AllergenService {
     public Product getAllergensByBarcodeId(long barcodeId) throws UnirestException {
 
         Product product;
-        String url = "https://world.openfoodfacts.org/api/v0/product/" + barcodeId + ".json ";
+        String url = "https://world.openfoodfacts.org/api/v0/product/" + barcodeId + ".json";
 
         if (checkBarcode(barcodeId)) { // might not be needed, TODO
             globalId = barcodeId;
@@ -70,11 +70,10 @@ public class AllergenService {
 
 
     Product checkForNull(Product product) throws UnirestException {
-        try {
-            return product;
-        } catch (NullPointerException e) {
+        if (product == null) {
             throw new UnirestException("Product not found");
         }
+        return product;
     }
 
 }
