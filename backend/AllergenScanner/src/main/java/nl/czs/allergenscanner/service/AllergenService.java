@@ -15,34 +15,28 @@ public class AllergenService {
     public Product getAllergensByBarcodeId(long barcodeId) throws UnirestException {
 
         Product product;
+        String url = "https://world.openfoodfacts.org/api/v0/product/" + barcodeId + ".json ";
 
-        if (checkBarcode(barcodeId)) {
+        if (checkBarcode(barcodeId)) { // might not be needed, TODO
             globalId = barcodeId;
 
             // In resources/mockResponse.json we can see the response from the API for peanut butter.
             // Now i want to map the response onto the Product object.
             // Allergens are located at { product.allergens } i might want to use allergens.hierarchy,
             // because this is also an array
-            HttpResponse<JsonNode> response = Unirest.get("https://world.openfoodfacts.org/api/v0/product/" + barcodeId + ".json")
+            HttpResponse<JsonNode> response = Unirest.get(url)
                     .header("accept", "application/json")
                     .asJson();
 
-
             product = mapToProduct(response.getBody());
-
-            System.out.println(response.getBody());
 
         } else {
             throw new UnirestException("Barcode not found");
         }
 
-        // TODO
-        // If the product variable is empty we print it out and return the test product for now.
-        try {
-            return product;
-        } catch (NullPointerException e) {
-            throw new UnirestException("Product not found");
-        }
+        product = checkForNull(product);
+        return product;
+
     }
 
     // TODO check if the barcode is valid, if not return false. API seems to already do a good job at this.
@@ -58,8 +52,8 @@ public class AllergenService {
     private boolean checkBarcode(long barcodeId) {
         return true;
     }
-    
-    private Product mapToProduct(JsonNode body) {
+
+    Product mapToProduct(JsonNode body) {
         String brand = body.getObject()
                 .getJSONObject("product").getString("brands");
         String name = body.getObject()
@@ -73,4 +67,14 @@ public class AllergenService {
 
         return new Product(globalId, name, allergens, brand);
     }
+
+
+    Product checkForNull(Product product) throws UnirestException {
+        try {
+            return product;
+        } catch (NullPointerException e) {
+            throw new UnirestException("Product not found");
+        }
+    }
+
 }
