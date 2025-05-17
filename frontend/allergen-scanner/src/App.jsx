@@ -2,16 +2,36 @@ import { useState, useEffect } from "react";
 import BarcodeScanner from "react-qr-barcode-scanner";
 import "./App.css";
 
-
 function App() {
   const [data, setData] = useState("Not Found");
   const [barcode, setBarcode] = useState(null);
+  const [needsScanning, setNeedsScanning] = useState(false);
 
   useEffect(() => {
     if (data !== "Not Found") {
       setBarcode(data);
+      setNeedsScanning(false);
+      console.log("Barcode scanned:", data); // Use data instead of barcode
     }
   }, [data]);
+
+  useEffect(() => {
+    if (barcode) {
+      fetch(`http://localhost:8080/api/allergens/${barcode}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("API response:", data);
+        })
+        .catch((error) => {
+          console.error("Error fetching barcode data:", error);
+        });
+    }
+  }, [barcode]);
 
   return (
     <>
@@ -25,17 +45,43 @@ function App() {
         </div>
 
         {/* div voor scanner */}
-        <div>
-          <BarcodeScanner
-            width={500}
-            height={500}
-            onUpdate={(err, result) => {
-              if (result) setData(result.text);
-              else setData("Not Found");
+        {needsScanning && (
+          <div>
+            <BarcodeScanner
+              width={500}
+              height={500}
+              onUpdate={(_, result) => {
+                if (result) setData(result.text);
+                else setData("Not Found");
+              }}
+            />
+            <p>{data !== "Not Found" ? data : "Scanning..."}</p>
+          </div>
+        )}
+
+        {!needsScanning && barcode && (
+          <div className="my-4">
+            <p>Scanned barcode: {barcode}</p>
+          </div>
+        )}
+
+        {/* div voor button */}
+        <div className="mt-4">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => {
+              if (!needsScanning) {
+                // Reset data when starting a new scan
+                setData("Not Found");
+              }
+              setNeedsScanning(!needsScanning);
             }}
-          />
-          <p>{barcode}</p>
+          >
+            {needsScanning ? "Stop Scanning" : "Scan Barcode"}
+          </button>
         </div>
+
+        {/* div voor results */}
       </div>
     </>
   );
