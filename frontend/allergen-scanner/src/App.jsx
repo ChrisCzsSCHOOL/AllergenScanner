@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import BarcodeScanner from "react-qr-barcode-scanner";
 import Product from "./components/Product";
+import Allergens from "./components/Allergens";
 import "./App.css";
 
 function App() {
@@ -84,7 +85,17 @@ function App() {
           </button>
         </div>
 
-        {/* div voor results - only shown when productData exists */}
+        {/* div voor allergenen */}
+        {productData &&
+          (productData.allergens && productData.allergens.length === 0 ? (
+            <div className="my-4 text-lg font-bold text-green-600">
+              Safe to eat!
+            </div>
+          ) : (
+            <Allergens allergens={productData.allergens} />
+          ))}
+
+        {/* component voor resultaten */}
         {productData && <Product data={productData} />}
       </div>
     </>
