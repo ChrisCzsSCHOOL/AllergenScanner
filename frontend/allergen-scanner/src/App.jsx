@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
 import BarcodeScanner from "react-qr-barcode-scanner";
+import Product from "./components/Product";
 import "./App.css";
 
 function App() {
   const [data, setData] = useState("Not Found");
   const [barcode, setBarcode] = useState(null);
   const [needsScanning, setNeedsScanning] = useState(false);
+  const [productData, setProductData] = useState(null);
 
   useEffect(() => {
     if (data !== "Not Found") {
       setBarcode(data);
       setNeedsScanning(false);
-      console.log("Barcode scanned:", data); // Use data instead of barcode
+      console.log("Barcode scanned:", data);
     }
   }, [data]);
 
@@ -26,6 +28,7 @@ function App() {
         })
         .then((data) => {
           console.log("API response:", data);
+          setProductData(data);
         })
         .catch((error) => {
           console.error("Error fetching barcode data:", error);
@@ -81,7 +84,8 @@ function App() {
           </button>
         </div>
 
-        {/* div voor results */}
+        {/* div voor results - only shown when productData exists */}
+        {productData && <Product data={productData} />}
       </div>
     </>
   );
