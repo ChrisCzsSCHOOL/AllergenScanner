@@ -20,7 +20,8 @@ function Product({ data }) {
         </table>
       </div>
 
-      <p>{JSON.stringify(data)}</p>
+      {/* <p>{JSON.stringify(data)}</p> */}
+      {/* Voor debuggen ^^ */}
     </>
   );
 }
