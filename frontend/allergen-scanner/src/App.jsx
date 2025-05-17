@@ -75,7 +75,7 @@ function App() {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={() => {
               if (!needsScanning) {
-                // Reset data when starting a new scan
+                // Reset data
                 setData("Not Found");
               }
               setNeedsScanning(!needsScanning);
