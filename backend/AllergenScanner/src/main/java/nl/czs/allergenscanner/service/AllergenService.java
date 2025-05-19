@@ -5,6 +5,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import nl.czs.allergenscanner.domain.Product;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,12 +59,7 @@ public class AllergenService {
                 .getJSONObject("product").getString("brands");
         String name = body.getObject()
                 .getJSONObject("product").getString("product_name");
-        String[] allergens = new String[body.getObject()
-                .getJSONObject("product").getJSONArray("allergens_hierarchy").length()];
-        for (int i = 0; i < allergens.length; i++) {
-            allergens[i] = body.getObject()
-                    .getJSONObject("product").getJSONArray("allergens_hierarchy").getString(i);
-        }
+        String[] allergens = getAllergens(body.getObject().getJSONObject("product").getString("allergens_from_ingredients"));
 
         return new Product(globalId, name, allergens, brand);
     }
@@ -75,5 +71,15 @@ public class AllergenService {
         }
         return product;
     }
+
+    String[] getAllergens(String allergens){
+
+        System.out.println("Allergens: " + allergens);
+        if (allergens == null || allergens.isEmpty()) {
+            return new String[0];
+        }
+        return allergens.split(", ");
+    }
+
 
 }

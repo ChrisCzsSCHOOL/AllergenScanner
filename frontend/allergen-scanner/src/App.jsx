@@ -93,6 +93,7 @@ function App() {
             </div>
           ) : (
             <Allergens allergens={productData.allergens} />
+            
           ))}
 
         {/* component voor resultaten */}
