@@ -19,7 +19,8 @@ function App() {
 
   useEffect(() => {
     if (barcode) {
-      fetch(`http://localhost:8080/api/allergens/${barcode}`)
+      // fetch(`http://localhost:8080/api/allergens/${barcode}`)
+      fetch(`https://allergenscanner-api.onrender.com/api/allergens/${barcode}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error ${response.status}`);
