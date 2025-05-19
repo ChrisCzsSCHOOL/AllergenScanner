@@ -74,7 +74,6 @@ public class AllergenService {
 
     String[] getAllergens(String allergens){
 
-        System.out.println("Allergens: " + allergens);
         if (allergens == null || allergens.isEmpty()) {
             return new String[0];
         }

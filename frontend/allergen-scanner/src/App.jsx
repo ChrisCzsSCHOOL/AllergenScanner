@@ -14,7 +14,7 @@ function App() {
     if (data !== "Not Found") {
       setBarcode(data);
       setNeedsScanning(false);
-      console.log("Barcode scanned:", data);
+      // console.log("Barcode scanned:", data);
     }
   }, [data]);
 
@@ -28,7 +28,7 @@ function App() {
           return response.json();
         })
         .then((data) => {
-          console.log("API response:", data);
+          // console.log("API response:", data);
           setProductData(data);
         })
         .catch((error) => {
@@ -87,7 +87,7 @@ function App() {
 
         {/* div voor allergenen */}
         {productData &&
-          (productData.allergens && productData.allergens.length === 0 ? (
+          (productData.allergens && productData.allergens.length === 0 || productData.allergens[0] == "" ? (
             <div className="my-4 text-lg font-bold text-green-600">
               Safe to eat!
             </div>
