@@ -14,7 +14,6 @@ function App() {
     if (data !== "Not Found") {
       setBarcode(data);
       setNeedsScanning(false);
-      // console.log("Barcode scanned:", data);
     }
   }, [data]);
 

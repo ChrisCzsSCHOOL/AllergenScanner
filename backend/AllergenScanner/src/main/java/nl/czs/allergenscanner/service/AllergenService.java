@@ -5,8 +5,12 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import nl.czs.allergenscanner.domain.Product;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Service
 public class AllergenService {
@@ -72,12 +76,26 @@ public class AllergenService {
         return product;
     }
 
-    String[] getAllergens(String allergens){
+    String[] getAllergens(String allergens) {
 
         if (allergens == null || allergens.isEmpty()) {
             return new String[0];
         }
-        return allergens.split(", ");
+
+        // Remove the ", "
+        String[] allergenArray = allergens.split(", ");
+
+        // LinkedHashSet can remove duplicates! :D
+        Set<String> uniqueAllergens = new LinkedHashSet<>();
+
+        // Remove the language code and add to the LinkedHashSet
+        for (int i = 0; i < allergenArray.length; i++) {
+            allergenArray[i] = allergenArray[i].replaceFirst("^[a-z]{2}:", "").trim().toLowerCase();
+            uniqueAllergens.add(allergenArray[i]);
+        }
+
+        // new String[0] to avoid null's
+        return uniqueAllergens.toArray(new String[0]);
     }
 
 
